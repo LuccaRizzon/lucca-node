@@ -1,0 +1,11 @@
+services:
+  db:
+    image: 'postgres:latest'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: lucca
+    volumes:
+      - ./pgdata:/var/lib/postgres/data
+    ports:
+      - "5432:5432"
