@@ -12,9 +12,12 @@ export const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(logger('dev'));
+
 ConectarServidorNoBd();
+
 app.use('/motorista', routerMotorista);
 app.use('/veiculo', routerVeiculo);
+
 app.use('/', (req, res) => {
     res.status(200).send('Caminho padrão');
 });

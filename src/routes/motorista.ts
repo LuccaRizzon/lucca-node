@@ -1,11 +1,11 @@
 
 import { Router }  from 'express';
 import { MotoristaController } from '../controller/MotoristaController';
-import { VeiculoController } from '../controller/VeiculoController';
+// import { VeiculoController } from '../controller/VeiculoController';
 
 export const routerMotorista = Router();
 const motoristaController = new MotoristaController();
-const veiculoController = new VeiculoController();
+// const veiculoController = new VeiculoController();
 
 routerMotorista.post('/', async (req, res) => {
     try {
