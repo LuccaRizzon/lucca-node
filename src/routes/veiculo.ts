@@ -17,8 +17,26 @@ routerVeiculo.post('/', async (req, res) => {
 routerVeiculo.get('/', async (req, res) => {
     try {
         const veiculos = await veiculoController.getAll();
-        res.status(201).json(veiculos);
+        res.status(200).json(veiculos);
     } catch (error) {
         res.status(500).json({ message: "Erro ao retornar veiculos", error });
+    }
+});
+
+routerVeiculo.put('/', async (req, res) => {
+    try {
+        const veiculoAtualizado = await veiculoController.update(req.body.veiculo.id, req.body); // req.body.motorista.id TESTAR bem isto depois
+        res.status(200).json(veiculoAtualizado);
+    } catch (error) {
+        res.status(500).json({ message: "Erro ao atualizar veiculo", error });
+    }
+});
+
+routerVeiculo.delete('/', async (req, res) => {
+    try {
+        const veiculoDeletado = await veiculoController.delete(req.body);
+        res.status(200).json(veiculoDeletado);
+    } catch (error) {
+        res.status(500).json({ message: "Erro ao deletar veiculo", error });
     }
 });

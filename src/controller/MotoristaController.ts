@@ -22,4 +22,39 @@ export class MotoristaController {
         const motoristas = await motoristaRepository.find();
         return motoristas;
     }
+
+    async update(id: number, motorista: Partial<Motorista>) {
+        const motoristaRepository = AppDataSource.getRepository(Motorista);
+        const veiculoRepository = AppDataSource.getRepository(Veiculo);
+
+        const motoristaExistente = await motoristaRepository.findOneBy({ id });
+        if (!motoristaExistente) {
+            throw new Error(`Motorista com ID ${id} não encontrado`);
+        }
+
+        if (motorista.veiculo?.id && motorista.veiculo.id !== motoristaExistente.veiculo.id) {
+            const veiculoUsado = await motoristaRepository.findOne({ where: { veiculo: { id: motorista.veiculo.id } } });
+            if (veiculoUsado) {
+                throw new Error("Não é possível atualizar. O veículo já está atrelado a outro motorista.");
+            }
+        }
+
+        await motoristaRepository.update(id, motorista);
+
+        const motoristaAtualizado = await motoristaRepository.findOneBy({ id });
+        return motoristaAtualizado;
+    }
+
+    async delete(id: number) {
+        const motoristaRepository = AppDataSource.getRepository(Motorista);
+
+        const motoristaExistente = await motoristaRepository.findOneBy({ id });
+        if (!motoristaExistente) {
+            throw new Error(`Motorista com ID ${id} não encontrado`);
+        }
+
+        await motoristaRepository.delete(id);
+
+        return { message: `Motorista com ID ${id} foi deletado com sucesso` };
+    }
 }
