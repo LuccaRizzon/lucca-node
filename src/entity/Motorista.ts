@@ -1,9 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, BeforeInsert, BeforeUpdate } from "typeorm";
 import { Veiculo } from "./Veiculo";
 
 @Entity("motoristas")
 export class Motorista {
-
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -19,7 +18,7 @@ export class Motorista {
     @Column({ type: "varchar", length: 20, nullable: true })
     telefone: string;
 
-    @OneToOne(() => Veiculo, { nullable: false })
+    @OneToOne(() => Veiculo, { nullable: true })
     @JoinColumn()
     veiculo: Veiculo;
 
@@ -29,5 +28,13 @@ export class Motorista {
         this.cpf = cpf;
         this.telefone = telefone;
         this.veiculo = veiculo;
+    }
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    sanitizeFields() {
+        this.cpf = this.cpf ? this.cpf.replace(/\D/g, "") : "";
+        this.rg = this.rg ? this.rg.replace(/\D/g, "") : "";
+        this.telefone = this.telefone ? this.telefone.replace(/\D/g, "") : "";
     }
 }
