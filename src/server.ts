@@ -1,9 +1,19 @@
 import { app } from "./app";
 
-const PORTA = 3000;
-const server = app.listen(PORTA, () => console.log(`ouvindo na porta ${PORTA}`));
+const server = app.listen(3001, () => console.log('Server running on port 3001'));
 
 process.on('SIGINT', () => {
-    server.close();
-    console.log('App finalizado');
+    console.log('Shutting down server...');
+    server.close(() => {
+        console.log('Server closed');
+        process.exit(0);
+    });
+});
+
+process.on('SIGTERM', () => {
+    console.log('Shutting down server...');
+    server.close(() => {
+        console.log('Server closed');
+        process.exit(0);
+    });
 });

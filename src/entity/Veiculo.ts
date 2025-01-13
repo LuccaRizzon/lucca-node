@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from "typeorm";
 
 @Entity("veiculos")
 export class Veiculo {
@@ -31,5 +31,12 @@ export class Veiculo {
         this.marca = marca;
         this.ano = ano;
         this.cor = cor;
+    }
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    sanitizeFields() {
+        this.placa = this.placa ? this.placa.replace(/\D/g, "") : "";
+        this.renavam = this.renavam ? this.renavam.replace(/\D/g, "") : "";
     }
 }

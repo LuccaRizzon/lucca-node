@@ -6,10 +6,21 @@ export const ConectarServidorNoBd = async () => {
         await AppDataSource.initialize();
         console.log(`App conectado ao DB ${AppDataSource.options.database}`);
 
-        process.on('SIGINT', async () => {
-            await AppDataSource.destroy();
-            console.log('Conexão com o DB fechada');
-        });
+        const handleExit = async () => {
+            try {
+                if (AppDataSource.isInitialized) {
+                    await AppDataSource.destroy();
+                    console.log('Conexão com o DB fechada');
+                }
+            } catch (error) {
+                console.error('Erro ao fechar conexão com o DB:', error);
+            } finally {
+                process.exit(0);
+            }
+        };
+
+        process.on('SIGINT', handleExit);
+        process.on('SIGTERM', handleExit);
     } catch (error) {
         console.error("Erro ao conectar ao DB:", error);
     }
