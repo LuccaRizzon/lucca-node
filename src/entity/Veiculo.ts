@@ -36,7 +36,7 @@ export class Veiculo {
     @BeforeInsert()
     @BeforeUpdate()
     sanitizeFields() {
-        this.placa = this.placa ? this.placa.replace(/\D/g, "") : "";
+        this.placa = this.placa ? this.placa.replace(/[^0-9A-Za-z]/g, "") : "";
         this.renavam = this.renavam ? this.renavam.replace(/\D/g, "") : "";
     }
 }

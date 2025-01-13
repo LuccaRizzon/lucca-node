@@ -54,7 +54,7 @@ export class VeiculoController {
             throw new Error(`Veículo com ID ${id} não encontrado`);
         }
 
-        if (veiculo.placa) veiculoExistente.placa = veiculo.placa.replace(/\D/g, "");
+        if (veiculo.placa) veiculoExistente.placa = veiculo.placa.replace(/[^0-9A-Za-z]/g, "");
         if (veiculo.renavam) veiculoExistente.renavam = veiculo.renavam.replace(/\D/g, "");
 
         await veiculoRepository.update(id, veiculo);
